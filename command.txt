@@ -1,0 +1,31 @@
+First Method
+
+keytool -genkey -keystore SSLStore.jks -alias SSLCertificate -keyalg RSA 
+
+java -Djavax.net.ssl.keyStore=SSLStore.jks -Djavax.net.ssl.keyStorePassword=aneel123 SSLSocketServer
+
+java -Djavax.net.ssl.trustStore=SSLStore.jks -Djavax.net.ssl.trustStorePassword=aneel123 SSLSocketClient
+
+Second Method
+
+keytool -genkey -keystore server-keystore.jks -alias server-key -keyalg RSA -keysize 2048 
+
+keytool -export -alias server-key -keystore server-keystore.jks -rfc -file server.cer
+
+keytool -genkey -alias client-key -keystore client-truststore.jks -keyalg RSA -keysize 2048
+
+keytool -import -alias server-key -file server.cer -keystore client-truststore.jks
+
+Compile
+
+java -Djavax.net.ssl.keyStore=server-keystore.jks -Djavax.net.ssl.keyStorePassword=server SSLSocketServer
+
+java -Djavax.net.ssl.trustStore=client-trustStore.jks -Djavax.net.ssl.trustStorePassword=client SSLSocketClient
+
+
+
+
+
+java -Djavax.net.ssl.keyStore=server-keystore.jks -Djavax.net.ssl.keyStorePassword=server SSLSessionServer
+
+java -Djavax.net.ssl.trustStore=client-trustStore.jks -Djavax.net.ssl.trustStorePassword=client SSLSessionClient
